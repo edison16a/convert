@@ -53,7 +53,8 @@ export class WorkerPool {
     const done = new Promise<WorkerOutcome>((resolve) => (settle = resolve));
 
     // A worker that dies (out of memory, for example) never answers, so we listen for it.
-    const onCrash = () => {
+    const onCrash = (reason?: unknown) => {
+      console.error("converter worker stopped", reason);
       this.busy.delete(job.id);
       slot.worker.terminate();
       settle({ ok: false, message: CRASH_MESSAGE });
