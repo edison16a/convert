@@ -21,7 +21,7 @@ export async function loadEngine(id: EngineId): Promise<Converter> {
 }
 
 /**
- * Engines small enough to fetch in the background after the first visit.
+ * Engines whose code is fetched in the background after the first visit.
  * ffmpeg is left out on purpose: its 30 MB core only downloads when a video
  * or audio file actually needs it.
  */
