@@ -8,7 +8,7 @@ import type { Job } from "../types";
 export function RowActions({ job }: { job: Job }) {
   const active = job.status === "queued" || job.status === "running";
   return (
-    <div className="flex items-center gap-1">
+    <div className="order-2 flex items-center gap-1 sm:order-none">
       {job.status === "done" && job.result && (
         <IconButton
           label={`Download ${job.result.name}`}

@@ -42,7 +42,7 @@ function FileRowBase({ job, globalTarget, unavailable }: FileRowProps) {
 
   return (
     <li className="flex flex-wrap items-center gap-x-4 gap-y-2.5 rounded-2xl bg-surface px-4 py-3">
-      <div className="flex min-w-0 flex-1 basis-52 items-center gap-3">
+      <div className="order-1 flex min-w-0 flex-1 basis-52 items-center gap-3 sm:order-none">
         <CategoryIcon category={category} size={20} className="shrink-0 text-muted" />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium">
@@ -57,7 +57,7 @@ function FileRowBase({ job, globalTarget, unavailable }: FileRowProps) {
       </div>
 
       {idle && !unsupported && (
-        <div className="flex items-center gap-2">
+        <div className="order-3 flex basis-full items-center gap-2 sm:order-none sm:basis-auto">
           {job.detected === undefined ? (
             <span className="font-mono text-[11px] text-muted">Detecting</span>
           ) : (
@@ -78,12 +78,14 @@ function FileRowBase({ job, globalTarget, unavailable }: FileRowProps) {
         </div>
       )}
 
-      <StatusCell
-        job={job}
-        unsupported={unsupported}
-        note={skippedByGlobal(job, globalTarget, unavailable)}
-        onRetry={() => retryJob(job.id)}
-      />
+      <div className="order-3 basis-full empty:hidden sm:order-none sm:basis-auto">
+        <StatusCell
+          job={job}
+          unsupported={unsupported}
+          note={skippedByGlobal(job, globalTarget, unavailable)}
+          onRetry={() => retryJob(job.id)}
+        />
+      </div>
       <RowActions job={job} />
     </li>
   );
