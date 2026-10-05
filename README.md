@@ -124,7 +124,7 @@ A small service worker caches the app shell and the static build output. After t
 
 ### Privacy
 
-No file bytes, file names or metadata leave the device. There are no cookies and no third party scripts. One e2e test fails the build if a conversion makes a request to any other origin.
+No file bytes, file names or metadata leave the device. There are no cookies and no third party scripts. An end to end test checks that a conversion makes no request to any other origin.
 
 ## Project structure
 
