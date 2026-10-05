@@ -79,7 +79,7 @@ export async function blocksToPdf(blocks: readonly Block[], title: string): Prom
       continue;
     }
     const style = styleOf(block);
-    const raw = block.kind === "item" ? `${block.marker === "-" ? "•" : block.marker} ${block.text}` : block.text;
+    const raw = block.kind === "item" ? `${block.marker === "-" ? "\u2022" : block.marker} ${block.text}` : block.text;
     const width = PAGE.width - PAGE.margin * 2 - style.indent;
     const lead = style.size * 1.4;
     y -= style.before;

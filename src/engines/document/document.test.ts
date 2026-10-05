@@ -72,7 +72,7 @@ describe("text helpers", () => {
   });
 
   it("swaps punctuation the PDF fonts cannot draw", () => {
-    expect(toWinAnsi("“quote” — ok 中")).toBe('"quote" - ok ?');
+    expect(toWinAnsi("\u201Cquote\u201D \u2014 ok \u4E2D")).toBe('"quote" - ok ?');
   });
 });
 
