@@ -2,6 +2,7 @@ import { useCapabilities } from "@/features/formats/capabilities";
 import { isConvertible } from "@/features/queue/jobs";
 import { useQueue } from "@/features/queue/store";
 import type { Job } from "@/features/queue/types";
+import { outputName } from "./naming";
 import { clearOpfsResults, removeFromOpfs } from "./opfs";
 import { WorkerPool, type RunHandle } from "./pool";
 import { prepareInput } from "./prepare";
@@ -58,6 +59,14 @@ async function run(job: Job): Promise<void> {
     const input = await prepareInput(job.file, job.detected as NonNullable<Job["detected"]>);
     // The user may have cancelled or removed the row while we were preparing.
     if (store().jobs.find((j) => j.id === job.id)?.status !== "running") return;
+
+    // SVG is rasterized to PNG above. If PNG is also what the user asked for, we are already done.
+    if (input.from === job.target) {
+      const name = outputName(job.file.name, input.from);
+      store().patch(job.id, { status: "done", progress: 1, result: { blob: input.file, name, size: input.file.size, opfsName: null } });
+      pump();
+      return;
+    }
 
     pool ??= new WorkerPool();
     let last = 0;
