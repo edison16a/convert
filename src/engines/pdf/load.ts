@@ -1,6 +1,7 @@
 import * as pdfjs from "pdfjs-dist";
 import type { PDFDocumentProxy } from "pdfjs-dist";
 import { ConversionError } from "../errors";
+import { NoFilterFactory, WorkerCanvasFactory } from "./factories";
 
 let configured = false;
 
@@ -28,11 +29,18 @@ export async function openPdf(file: File): Promise<PDFDocumentProxy> {
       cMapPacked: true,
       iccUrl: publicUrl("/pdfjs/iccs/"),
       wasmUrl: publicUrl("/pdfjs/wasm/"),
+      // Workers have no document, so tell pdf.js to fetch its helper files from its own
+      // worker and to use factories that do not need the DOM.
+      useWorkerFetch: true,
+      CanvasFactory: WorkerCanvasFactory,
+      FilterFactory: NoFilterFactory,
     }).promise;
   } catch (error) {
     if (error instanceof Error && error.name === "PasswordException") {
       throw new ConversionError("This PDF is password protected.", "encrypted");
     }
+    // Keep the real reason in the console for bug reports. The row gets the plain version.
+    console.error("pdf.js could not open the file", error);
     throw new ConversionError("This PDF could not be read. It may be damaged.", "corrupt");
   }
 }
