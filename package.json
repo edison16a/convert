@@ -8,10 +8,10 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "npm run ffmpeg:copy && next dev",
-    "build": "npm run ffmpeg:copy && next build",
+    "dev": "npm run assets:copy && next dev",
+    "build": "npm run assets:copy && next build",
     "start": "next start",
-    "ffmpeg:copy": "node scripts/copy-ffmpeg-core.mjs",
+    "assets:copy": "node scripts/copy-engine-assets.mjs",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

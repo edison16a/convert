@@ -10,5 +10,6 @@ next-env.d.ts
 npm-debug.log*
 .vercel
 
-# Copied from node_modules by scripts/copy-ffmpeg-core.mjs
+# Copied from node_modules by scripts/copy-engine-assets.mjs
 public/ffmpeg/
+public/pdfjs/
