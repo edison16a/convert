@@ -14,7 +14,7 @@ const HINTS = [
 /** The first screen: one big target, one sentence, one button, and the privacy promise. */
 export function EmptyState() {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center rounded-[2rem] border border-dashed border-line px-6 py-16 text-center">
+    <div className="flex flex-1 flex-col items-center justify-center rounded-[2rem] border border-dashed border-muted/40 px-6 py-16 text-center">
       <ul className="mb-8 flex items-center gap-5 text-accent-ink" aria-label="Supported kinds of files">
         {HINTS.map(({ label, Icon }) => (
           <li key={label} title={label}>
