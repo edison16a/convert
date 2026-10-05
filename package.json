@@ -8,8 +8,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "npm run assets:copy && next dev",
-    "build": "npm run assets:copy && next build",
+    "dev": "npm run assets:copy && next dev --webpack",
+    "build": "npm run assets:copy && next build --webpack",
     "start": "next start",
     "assets:copy": "node scripts/copy-engine-assets.mjs",
     "lint": "eslint .",
