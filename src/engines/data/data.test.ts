@@ -7,7 +7,7 @@ const file = (body: BlobPart, name: string) => new File([body], name);
 const noop = () => {};
 
 async function run(body: BlobPart, name: string, from: string, to: string) {
-  const out = await convertData({ file: file(body, name), from: from as never, to: to as never, report: noop });
+  const out = await convertData({ file: file(body, name), from: from as never, to: to as never, report: noop, phase: noop });
   return { text: await out.blob.text(), blob: out.blob, ext: out.extension };
 }
 

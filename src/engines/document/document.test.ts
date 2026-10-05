@@ -7,7 +7,7 @@ import { blocksToText, textToHtml } from "./text";
 import { toWinAnsi } from "./winansi";
 
 const run = async (body: BlobPart, name: string, from: string, to: string) => {
-  const out = await convertDocument({ file: new File([body], name), from: from as never, to: to as never, report: () => {} });
+  const out = await convertDocument({ file: new File([body], name), from: from as never, to: to as never, report: () => {}, phase: () => {} });
   return { blob: out.blob, ext: out.extension, text: () => out.blob.text() };
 };
 
