@@ -1,5 +1,9 @@
-/** Results bigger than this go to disk instead of staying in memory. */
-export const SPILL_THRESHOLD = 256 * 1024 * 1024;
+/**
+ * Results bigger than this go to disk instead of staying in memory. The
+ * default is 256 MB. NEXT_PUBLIC_SPILL_THRESHOLD_MB lets a deployment tune it,
+ * and lets tests exercise the disk path with a tiny file.
+ */
+export const SPILL_THRESHOLD = Number(process.env.NEXT_PUBLIC_SPILL_THRESHOLD_MB ?? 256) * 1024 * 1024;
 
 const DIR = "results";
 
