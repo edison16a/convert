@@ -1,5 +1,5 @@
 import { dedupeNames } from "./names";
-import { writeZip, zipToBlob, type ZipEntry } from "./zip";
+import type { ZipEntry } from "./zip";
 
 /** Hands a blob to the browser's download flow through a temporary link. */
 export function saveBlob(blob: Blob, name: string): void {
@@ -28,6 +28,8 @@ export async function saveAsZip(results: readonly ZipEntry[], archiveName = "con
   const names = dedupeNames(results.map((entry) => entry.name));
   const entries = results.map((entry, index) => ({ name: names[index], blob: entry.blob }));
   const picker = (window as unknown as SaveFilePicker).showSaveFilePicker;
+  // fflate is only needed once someone asks for a zip, so it stays out of the first page load.
+  const { writeZip, zipToBlob } = await import("./zip");
 
   if (picker) {
     try {
