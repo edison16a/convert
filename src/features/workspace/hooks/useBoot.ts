@@ -23,7 +23,7 @@ export function useBoot(): void {
 
     const idle = window.requestIdleCallback ?? ((callback: () => void) => window.setTimeout(callback, 2000));
     const handle = idle(() => {
-      if (mayPrefetch()) warmEngines();
+      if (mayPrefetch()) void warmEngines();
     });
     return () => (window.cancelIdleCallback ?? window.clearTimeout)(handle as number);
   }, []);

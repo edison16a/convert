@@ -4,7 +4,7 @@ import { useQueue } from "@/features/queue/store";
 import type { Job } from "@/features/queue/types";
 import { outputName } from "./naming";
 import { clearOpfsResults, removeFromOpfs } from "./opfs";
-import { WorkerPool, type RunHandle } from "./pool";
+import type { RunHandle, WorkerPool } from "./pool";
 import { prepareInput } from "./prepare";
 import { isHeavy, pickNext, poolSize } from "./scheduler";
 import { explainFailure } from "@/engines/errors";
@@ -21,10 +21,21 @@ const limits = () => ({
   heavy: 1,
 });
 
-/** Loads the lightweight engines in the background once the page is idle. */
-export function warmEngines(): void {
-  pool ??= new WorkerPool();
-  void pool.warm();
+/**
+ * The pool (and Comlink with it) loads on first use, which keeps both out of
+ * the initial page bundle.
+ */
+async function getPool(): Promise<WorkerPool> {
+  if (!pool) {
+    const { WorkerPool: Pool } = await import("./pool");
+    pool ??= new Pool();
+  }
+  return pool;
+}
+
+/** Loads the offline engines in the background once the page is idle. */
+export async function warmEngines(): Promise<void> {
+  await (await getPool()).warm();
 }
 
 /** Marks every ready row as waiting and starts as many as the pool allows. */
@@ -68,9 +79,11 @@ async function run(job: Job): Promise<void> {
       return;
     }
 
-    pool ??= new WorkerPool();
+    const workers = await getPool();
+    // Cancelled while the pool was loading: nothing to start.
+    if (store().jobs.find((j) => j.id === job.id)?.status !== "running") return;
     let last = 0;
-    const handle = pool.run(
+    const handle = workers.run(
       { id: job.id, file: input.file, from: input.from, to: job.target as NonNullable<Job["target"]> },
       (fraction) => {
         const now = performance.now();
