@@ -30,6 +30,21 @@ export class WorkerPool {
     return { worker, api: Comlink.wrap<WorkerApi>(worker) };
   }
 
+  /**
+   * Starts a worker and has it load the lightweight engines. The service
+   * worker caches those files as they stream in, so image, data and document
+   * conversions keep working offline. The worker then waits for real jobs.
+   */
+  async warm(): Promise<void> {
+    const slot = this.spawn();
+    try {
+      await slot.api.warm();
+      this.idle.push(slot);
+    } catch {
+      slot.worker.terminate();
+    }
+  }
+
   run(job: WorkerJob, onProgress: (fraction: number) => void, onPhase: (phase: Phase) => void): RunHandle {
     const slot = this.idle.pop() ?? this.spawn();
     this.busy.set(job.id, slot);

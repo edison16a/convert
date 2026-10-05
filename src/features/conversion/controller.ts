@@ -20,6 +20,12 @@ const limits = () => ({
   heavy: 1,
 });
 
+/** Loads the lightweight engines in the background once the page is idle. */
+export function warmEngines(): void {
+  pool ??= new WorkerPool();
+  void pool.warm();
+}
+
 /** Marks every ready row as waiting and starts as many as the pool allows. */
 export function startConversion(): void {
   const unavailable = useCapabilities.getState().unavailable;

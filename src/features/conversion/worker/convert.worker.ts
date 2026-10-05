@@ -4,7 +4,7 @@ import { findEngine } from "@/features/formats/registry";
 import { outputName } from "../naming";
 import { SPILL_THRESHOLD, spillToOpfs } from "../opfs";
 import type { WorkerApi } from "../types";
-import { loadEngine } from "./engines";
+import { LIGHT_ENGINES, loadEngine } from "./engines";
 
 /**
  * One worker runs one job at a time. Routing is a lookup in the format
@@ -29,6 +29,10 @@ const api: WorkerApi = {
     } catch (error) {
       return { ok: false, message: explainFailure(error) };
     }
+  },
+
+  async warm() {
+    await Promise.allSettled(LIGHT_ENGINES.map(loadEngine));
   },
 };
 

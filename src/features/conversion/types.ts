@@ -25,4 +25,6 @@ export interface WorkerApi {
     onProgress: (fraction: number) => void,
     onPhase: (phase: Phase) => void,
   ): Promise<WorkerOutcome>;
+  /** Loads the lightweight engines ahead of time so they are cached for offline use. */
+  warm(): Promise<void>;
 }

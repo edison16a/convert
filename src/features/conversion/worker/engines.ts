@@ -19,3 +19,10 @@ export async function loadEngine(id: EngineId): Promise<Converter> {
       return (await import("@/engines/data")).convertData;
   }
 }
+
+/**
+ * Engines small enough to fetch in the background after the first visit.
+ * ffmpeg is left out on purpose: its 30 MB core only downloads when a video
+ * or audio file actually needs it.
+ */
+export const LIGHT_ENGINES: readonly EngineId[] = ["image", "data", "document", "pdf"];
