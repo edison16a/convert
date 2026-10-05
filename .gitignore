@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+coverage/
+test-results/
+*.tsbuildinfo
+next-env.d.ts
+.env*
+.DS_Store
+npm-debug.log*
+.vercel
+
+# Copied from node_modules by scripts/copy-ffmpeg-core.mjs
+public/ffmpeg/
