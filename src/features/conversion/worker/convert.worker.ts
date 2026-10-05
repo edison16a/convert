@@ -27,6 +27,8 @@ const api: WorkerApi = {
       }
       return { ok: true, blob: result.blob, name, opfsName: null };
     } catch (error) {
+      // The row gets a plain sentence. The raw error stays in the console for bug reports.
+      console.error("conversion failed", error);
       return { ok: false, message: explainFailure(error) };
     }
   },
