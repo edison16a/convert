@@ -36,7 +36,8 @@ function FileRowBase({ job, globalTarget, unavailable }: FileRowProps) {
   const unsupported = unsupportedReason(job);
   const idle = job.status === "idle";
   const finished = job.status === "running" || job.status === "done";
-  const shownName = finished && job.target ? outputName(job.file.name, job.target) : job.file.name;
+  // A finished row shows the real result name, which can differ from the target (a PDF to PNG gives a zip).
+  const shownName = job.result?.name ?? (finished && job.target ? outputName(job.file.name, job.target) : job.file.name);
   const detectedLabel = job.detected ? FORMATS[job.detected].label : null;
 
   return (
