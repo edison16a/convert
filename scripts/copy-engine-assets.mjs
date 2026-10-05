@@ -9,6 +9,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 /** Each entry copies one folder of a package to a folder under public/. */
 const assets = [
+  // ffmpeg's own worker script. It must not pass through webpack, which rewrites
+  // the dynamic import of the core and breaks loading it from a blob URL.
+  { from: "@ffmpeg/ffmpeg/dist/esm", to: "public/ffmpeg/worker" },
   { from: "@ffmpeg/core/dist/esm", to: "public/ffmpeg/st" },
   { from: "@ffmpeg/core-mt/dist/esm", to: "public/ffmpeg/mt" },
   { from: "pdfjs-dist/standard_fonts", to: "public/pdfjs/standard_fonts" },

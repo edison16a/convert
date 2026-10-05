@@ -4,6 +4,13 @@ import { ConversionError } from "../errors";
 const CACHE_NAME = "convert-engine-v1";
 
 /**
+ * "no-store" skips the browser's HTTP cache. We keep our own copy in the
+ * Cache API, and large wasm responses can fail to write to the HTTP cache
+ * (private windows especially), which would break the load for nothing.
+ */
+const FETCH_OPTIONS: RequestInit = { cache: "no-store" };
+
+/**
  * Fetches an engine file once and keeps it in the Cache API, so the 30 MB
  * core is only downloaded the first time and works offline after that. The
  * result is a blob URL because ffmpeg.wasm loads its core from a URL.
@@ -15,14 +22,14 @@ async function cachedBlobUrl(path: string, type: string): Promise<string> {
     const cache = await caches.open(CACHE_NAME);
     response = await cache.match(url);
     if (!response) {
-      const fresh = await fetch(url);
+      const fresh = await fetch(url, FETCH_OPTIONS);
       if (!fresh.ok) throw new Error(`${fresh.status}`);
       await cache.put(url, fresh.clone());
       response = fresh;
     }
   } catch {
     // The Cache API can be blocked (private windows), so fall back to a plain fetch.
-    response = await fetch(url);
+    response = await fetch(url, FETCH_OPTIONS);
   }
   return URL.createObjectURL(new Blob([await response.arrayBuffer()], { type }));
 }
@@ -40,12 +47,15 @@ export function loadFfmpeg(): Promise<FFmpeg> {
     const dir = threaded ? "/ffmpeg/mt" : "/ffmpeg/st";
     const ffmpeg = new FFmpeg();
     await ffmpeg.load({
+      // Served as a plain file so webpack leaves its dynamic import alone.
+      classWorkerURL: new URL("/ffmpeg/worker/worker.js", self.location.href).href,
       coreURL: await cachedBlobUrl(`${dir}/ffmpeg-core.js`, "text/javascript"),
       wasmURL: await cachedBlobUrl(`${dir}/ffmpeg-core.wasm`, "application/wasm"),
       ...(threaded && { workerURL: await cachedBlobUrl(`${dir}/ffmpeg-core.worker.js`, "text/javascript") }),
     });
     return ffmpeg;
-  })().catch(() => {
+  })().catch((error) => {
+    console.error("ffmpeg could not load", error);
     loading = null; // let the next attempt try again, for example once the network is back
     throw new ConversionError(
       "The converter could not be loaded. Check your connection and retry. It works offline after the first load.",
