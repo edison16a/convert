@@ -22,9 +22,12 @@ const nativeSupport = new Map<string, Promise<boolean>>();
  */
 function canEncodeNatively(type: string): Promise<boolean> {
   if (!nativeSupport.has(type)) {
+    // A canvas with no context yet refuses to export, so claim a 2d one first.
+    const probe = new OffscreenCanvas(1, 1);
+    probe.getContext("2d");
     nativeSupport.set(
       type,
-      new OffscreenCanvas(1, 1)
+      probe
         .convertToBlob({ type })
         .then((blob) => blob.type === type)
         .catch(() => false),
