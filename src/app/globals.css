@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+/*
+ * One accent color, plus black and white. Every gray below is just black or
+ * white at low strength, so the palette stays honest. The accent has two
+ * values: a fill (buttons, bars) and an "ink" that is light enough to read as
+ * text on the dark background.
+ */
+:root {
+  --bg: #ffffff;
+  --surface: #f6f6f7;
+  --surface-hover: #eeeef0;
+  --line: #e7e7ea;
+  --fg: #0a0a0b;
+  --muted: #6a6a73;
+  --accent: #3b4cf5;
+  --accent-ink: #3b4cf5;
+  --accent-soft: #eef0ff;
+  --on-accent: #ffffff;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b0b0c;
+    --surface: #151517;
+    --surface-hover: #1d1d20;
+    --line: #26262a;
+    --fg: #f4f4f5;
+    --muted: #9a9aa4;
+    --accent: #4f5df7;
+    --accent-ink: #8a96ff;
+    --accent-soft: #1a1d3d;
+    --on-accent: #ffffff;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* One focus style for everything: a two pixel accent ring, only for keyboard users. */
+:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 2px;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
