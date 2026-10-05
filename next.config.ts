@@ -14,6 +14,13 @@ const isolationHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   devIndicators: false,
+  webpack: (config) => {
+    // Web worker chunks carry their own webpack runtime, which trips webpack's
+    // real content hash plugin on cached rebuilds ("asset cached with a
+    // reference to another asset"). Plain chunk hashes are still unique per build.
+    config.optimization.realContentHash = false;
+    return config;
+  },
   async headers() {
     return [{ source: "/:path*", headers: isolationHeaders }];
   },
