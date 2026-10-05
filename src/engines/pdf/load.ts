@@ -1,4 +1,6 @@
-import * as pdfjs from "pdfjs-dist";
+// The legacy build includes polyfills for newer JavaScript features (Map.getOrInsertComputed
+// among them), so it runs on every browser we support, not only the very latest.
+import * as pdfjs from "pdfjs-dist/legacy/build/pdf.mjs";
 import type { PDFDocumentProxy } from "pdfjs-dist";
 import { ConversionError } from "../errors";
 import { NoFilterFactory, WorkerCanvasFactory } from "./factories";
@@ -14,7 +16,7 @@ const publicUrl = (path: string) => new URL(path, self.location.href).href;
  */
 function configure() {
   if (configured) return;
-  pdfjs.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.mjs", import.meta.url).toString();
+  pdfjs.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/legacy/build/pdf.worker.min.mjs", import.meta.url).toString();
   configured = true;
 }
 
