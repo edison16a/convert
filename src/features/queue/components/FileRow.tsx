@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { CategoryIcon } from "@/components/icons/file-types";
+import { FormatIcon } from "@/components/icons/file-types";
 import { ChevronRightIcon } from "@/components/icons/interface";
 import { retryJob } from "@/features/conversion/controller";
 import { outputName } from "@/features/conversion/naming";
@@ -32,18 +32,19 @@ function TypeChip({ label }: { label: string }) {
  */
 function FileRowBase({ job, globalTarget, unavailable }: FileRowProps) {
   const setTarget = useQueue((state) => state.setTarget);
-  const category = job.detected ? FORMATS[job.detected].category : null;
   const unsupported = unsupportedReason(job);
   const idle = job.status === "idle";
   const finished = job.status === "running" || job.status === "done";
   // A finished row shows the real result name, which can differ from the target (a PDF to PNG gives a zip).
   const shownName = job.result?.name ?? (finished && job.target ? outputName(job.file.name, job.target) : job.file.name);
+  // The icon follows what the row is showing: the result once converting, the source before.
+  const iconFormat = (finished && job.target ? job.target : job.detected) ?? null;
   const detectedLabel = job.detected ? FORMATS[job.detected].label : null;
 
   return (
     <li className="flex flex-wrap items-center gap-x-4 gap-y-2.5 rounded-2xl bg-surface px-4 py-3">
       <div className="order-1 flex min-w-0 flex-1 basis-52 items-center gap-3 sm:order-none">
-        <CategoryIcon category={category} size={20} className="shrink-0 text-muted" />
+        <FormatIcon format={iconFormat} size={20} className="shrink-0" />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium">
             <MiddleTruncate text={shownName} />

@@ -32,7 +32,7 @@ export function StatusCell({ job, note, unsupported, onRetry }: StatusCellProps)
 
     case "done":
       return (
-        <span className="flex items-center gap-2 text-accent-ink">
+        <span className="flex items-center gap-2 text-success">
           <CheckCircleIcon size={16} />
           <span className={mono}>{job.result ? formatBytes(job.result.size) : "Done"}</span>
         </span>

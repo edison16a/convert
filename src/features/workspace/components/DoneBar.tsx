@@ -21,7 +21,7 @@ export function DoneBar() {
   return (
     <>
       <div className="flex items-center gap-3">
-        <CheckCircleIcon size={26} className="text-accent-ink" />
+        <CheckCircleIcon size={26} className="text-success" />
         <div>
           <h2 className="text-xl font-semibold tracking-tight">Done</h2>
           <p className="font-mono text-xs text-muted">{describeSummary(summary)}</p>
