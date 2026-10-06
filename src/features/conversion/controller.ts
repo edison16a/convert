@@ -35,7 +35,10 @@ async function getPool(): Promise<WorkerPool> {
 
 /** Loads the offline engines in the background once the page is idle. */
 export async function warmEngines(): Promise<void> {
-  await (await getPool()).warm();
+  const urls = await (await getPool()).warm();
+  // The service worker is certain to see requests from the page itself. A worker's own
+  // requests are not always routed through it, so we fetch the same files from here too.
+  await Promise.allSettled(urls.map((url) => fetch(url).then((response) => response.blob())));
 }
 
 /** Marks every ready row as waiting and starts as many as the pool allows. */

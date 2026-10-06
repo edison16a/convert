@@ -35,13 +35,15 @@ export class WorkerPool {
    * worker caches those files as they stream in, so image, data and document
    * conversions keep working offline. The worker then waits for real jobs.
    */
-  async warm(): Promise<void> {
+  async warm(): Promise<string[]> {
     const slot = this.spawn();
     try {
-      await slot.api.warm();
+      const urls = await slot.api.warm();
       this.idle.push(slot);
+      return urls;
     } catch {
       slot.worker.terminate();
+      return [];
     }
   }
 
