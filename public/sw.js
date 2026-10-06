@@ -39,7 +39,9 @@ self.addEventListener("fetch", (event) => {
       fetch(request)
         .then((response) => {
           const copy = response.clone();
-          caches.open(CACHE).then((cache) => cache.put("/", copy));
+          // waitUntil keeps the worker alive until the write finishes. Without it a slow
+          // device can stop the worker mid write and the file silently never gets cached.
+          event.waitUntil(caches.open(CACHE).then((cache) => cache.put("/", copy)));
           return response;
         })
         .catch(() => caches.match("/")),
@@ -55,7 +57,7 @@ self.addEventListener("fetch", (event) => {
           fetch(request).then((response) => {
             if (response.ok) {
               const copy = response.clone();
-              caches.open(CACHE).then((cache) => cache.put(request, copy));
+              event.waitUntil(caches.open(CACHE).then((cache) => cache.put(request, copy)));
             }
             return response;
           }),
