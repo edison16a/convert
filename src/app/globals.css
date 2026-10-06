@@ -1,10 +1,13 @@
 @import "tailwindcss";
 
 /*
- * One accent color, plus black and white. Every gray below is just black or
- * white at low strength, so the palette stays honest. The accent has two
- * values: a fill (buttons, bars) and an "ink" that is light enough to read as
- * text on the dark background.
+ * One accent color carries every action: buttons, focus, progress. The grays
+ * are black or white at low strength. The accent has two values, a fill and an
+ * "ink" that is light enough to read as text on the dark background.
+ *
+ * Two small sets of color sit beside it, both taken from the design mockups.
+ * File type colors tint only the file icons, so a mixed batch is easy to scan.
+ * Success green marks finished work. Neither is used for anything else.
  */
 :root {
   --bg: #ffffff;
@@ -17,6 +20,13 @@
   --accent-ink: #3b4cf5;
   --accent-soft: #eef0ff;
   --on-accent: #ffffff;
+  --type-image: #7c3aed;
+  --type-pdf: #e0452f;
+  --type-doc: #3b5bdb;
+  --type-data: #1f9d55;
+  --type-video: #c2185b;
+  --type-audio: #d9531e;
+  --success: #1f9d55;
   color-scheme: light;
 }
 
@@ -32,6 +42,13 @@
     --accent-ink: #8a96ff;
     --accent-soft: #1a1d3d;
     --on-accent: #ffffff;
+    --type-image: #a78bfa;
+    --type-pdf: #ff7a66;
+    --type-doc: #7b93ff;
+    --type-data: #4ade80;
+    --type-video: #f06292;
+    --type-audio: #fb923c;
+    --success: #4ade80;
     color-scheme: dark;
   }
 }
@@ -47,6 +64,13 @@
   --color-accent-ink: var(--accent-ink);
   --color-accent-soft: var(--accent-soft);
   --color-on-accent: var(--on-accent);
+  --color-type-image: var(--type-image);
+  --color-type-pdf: var(--type-pdf);
+  --color-type-doc: var(--type-doc);
+  --color-type-data: var(--type-data);
+  --color-type-video: var(--type-video);
+  --color-type-audio: var(--type-audio);
+  --color-success: var(--success);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
