@@ -3,19 +3,18 @@ import { ConvertApp } from "./support/app";
 import { csv, docx, pdf, png, svg } from "./support/fixtures";
 
 test("after the first load, conversions keep working with no network", async ({ page, context }) => {
+  // Errors from the converter workers, printed so a CI failure says what broke.
+  page.on("console", (message) => {
+    if (message.type() === "error") console.log("page console error:", message.text().slice(0, 300));
+  });
   await page.goto("/");
   await page.evaluate(() => navigator.serviceWorker.ready);
-  // The app warms its engines when the browser is idle. Wait for the cache to fill.
-  await page.waitForFunction(
-    async () => {
-      const cache = await caches.open("convert-shell-v1");
-      const urls = (await cache.keys()).map((request) => request.url);
-      return urls.some((url) => url.includes("avif_enc")) && urls.some((url) => url.includes("pdf.worker"));
-    },
-    undefined,
-    { timeout: 90_000 },
-  );
+  // The app marks the page once its offline copy is complete. Going offline any earlier would
+  // cut off files that are still downloading.
+  await page.waitForSelector('html[data-offline="ready"]', { timeout: 90_000 });
 
+  const cached = await page.evaluate(async () => (await (await caches.open("convert-shell-v1")).keys()).map((r) => new URL(r.url).pathname));
+  console.log("cached files:", cached.length, "chunks:", cached.filter((url) => url.includes("/chunks/")).length);
   await context.setOffline(true);
   await page.reload();
   const app = new ConvertApp(page);
