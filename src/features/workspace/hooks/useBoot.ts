@@ -26,7 +26,10 @@ export function useBoot(): void {
       if (!mayPrefetch()) return;
       // Warm only once the service worker controls the page, or nothing would be cached.
       void whenServiceWorkerControls().then(async (controlled) => {
-        if (controlled) await warmEngines();
+        if (!controlled) return;
+        await warmEngines();
+        // A plain marker that the offline copy is complete. Tests wait on it, and so could a status badge.
+        document.documentElement.dataset.offline = "ready";
       });
     });
     return () => (window.cancelIdleCallback ?? window.clearTimeout)(handle as number);
