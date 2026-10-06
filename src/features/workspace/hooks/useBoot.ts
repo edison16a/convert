@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { warmEngines } from "@/features/conversion/controller";
 import { clearOpfsResults } from "@/features/conversion/opfs";
 import { useCapabilities } from "@/features/formats/capabilities";
-import { registerServiceWorker } from "@/features/pwa/registerServiceWorker";
+import { registerServiceWorker, whenServiceWorkerControls } from "@/features/pwa/registerServiceWorker";
 
 /** Respect people on metered or slow connections: no background downloads for them. */
 function mayPrefetch(): boolean {
@@ -23,7 +23,11 @@ export function useBoot(): void {
 
     const idle = window.requestIdleCallback ?? ((callback: () => void) => window.setTimeout(callback, 2000));
     const handle = idle(() => {
-      if (mayPrefetch()) void warmEngines();
+      if (!mayPrefetch()) return;
+      // Warm only once the service worker controls the page, or nothing would be cached.
+      void whenServiceWorkerControls().then(async (controlled) => {
+        if (controlled) await warmEngines();
+      });
     });
     return () => (window.cancelIdleCallback ?? window.clearTimeout)(handle as number);
   }, []);
