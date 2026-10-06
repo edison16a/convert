@@ -25,6 +25,8 @@ test("after the first load, conversions keep working with no network", async ({ 
   await app.waitForDetection();
   await app.convert();
   await app.waitForDone();
+  // Print every row first, so a failure in a slow environment says which file broke.
+  console.log("offline rows:", JSON.stringify((await page.getByRole("listitem").allInnerTexts()).map((t) => t.replace(/\n+/g, " | "))));
   await expect(page.getByText(/^5 files converted,/)).toBeVisible();
 
   // AVIF has no native encoder in Chromium, so this goes through the cached WASM codec.
