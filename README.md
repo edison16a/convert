@@ -126,6 +126,17 @@ A small service worker caches the app shell and the static build output. After t
 
 No file bytes, file names or metadata leave the device. There are no cookies and no third party scripts. An end to end test checks that a conversion makes no request to any other origin.
 
+### Design
+
+The interface is one full screen page with rounded corners and generous spacing. One blue accent carries every action: buttons, focus rings and progress bars. Everything else is black, white and soft grays.
+
+Two small color sets sit beside the accent, both taken from the design mockups:
+
+- **File type colors** tint only the file icons: purple for images, red for PDF, blue for documents, green for data, crimson for video and orange for audio.
+- **Green** marks finished work.
+
+The values are CSS variables in `src/app/globals.css`, with a lighter set for dark mode that follows the system setting. Icons are plain SVG on a shared 24 unit grid. The layout holds up at 390 px wide, and every control works from the keyboard.
+
 ## Project structure
 
 ```
