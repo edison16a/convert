@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
-import { CategoryIcon } from "@/components/icons/file-types";
+import { FormatIcon } from "@/components/icons/file-types";
 import { ChevronDownIcon, LayersIcon } from "@/components/icons/interface";
 import { useDismiss } from "@/components/ui/useDismiss";
 import { FORMATS } from "../definitions";
@@ -61,7 +61,7 @@ export function FormatPicker({ options, value, onChange, variant, label, disable
         {global ? (
           <LayersIcon size={15} className="text-muted" />
         ) : (
-          def && <CategoryIcon category={def.category} size={14} className="text-muted" />
+          value && <FormatIcon format={value} size={14} />
         )}
         <span className={global && !def ? "font-sans text-sm font-medium" : "font-mono"}>
           {def ? def.label : global ? "Convert all to" : "Choose"}

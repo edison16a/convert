@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { CategoryIcon } from "@/components/icons/file-types";
+import { FormatIcon } from "@/components/icons/file-types";
 import { CheckIcon, SearchIcon } from "@/components/icons/interface";
 import { groupByCategory } from "../registry";
 import { FORMATS } from "../definitions";
@@ -85,7 +85,7 @@ export function FormatMenu({ options, value, onSelect }: FormatMenuProps) {
                   onClick={() => onSelect(def.id)}
                   className={`flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm ${isActive ? "bg-surface" : ""}`}
                 >
-                  <CategoryIcon category={def.category} size={15} className="text-muted" />
+                  <FormatIcon format={def.id} size={15} />
                   <span className="flex-1 font-mono text-xs font-medium">{def.label}</span>
                   {def.id === value && <CheckIcon size={15} className="text-accent-ink" />}
                 </div>
